@@ -89,19 +89,19 @@ unicode_val     ({unicode_char}|{little_u_val}|{big_u_val}|{esc_char})
 "import"                { return(TOKENIZER_DIRECTIVE); }
 "package"               { return(TOKENIZER_DIRECTIVE); }
 
-\"                                          { BEGIN(string_literal);    return(TOKENIZER_LITERAL); }
-<string_literal>(\\[^\r\n]|[^\\"\r\n])*     { return(TOKENIZER_LITERAL); }
+\"                                          { BEGIN(string_literal);    return(TOKENIZER_EXECUTING_LINE_ARROW); }
+<string_literal>(\\[^\r\n]|[^\\"\r\n])*     { return(TOKENIZER_EXECUTING_LINE_ARROW); }
 <string_literal>\n                          { return(TOKENIZER_NEWLINE); }
 <string_literal>\r                          { return(TOKENIZER_NEWLINE); }
 <string_literal>\r\n                        { return(TOKENIZER_NEWLINE); }
-<string_literal>\"                          { BEGIN(INITIAL);           return(TOKENIZER_LITERAL); }
+<string_literal>\"                          { BEGIN(INITIAL);           return(TOKENIZER_EXECUTING_LINE_ARROW); }
 
-"`"                                         { BEGIN(alt_wysiwyg_literal);    return(TOKENIZER_LITERAL); }
-<alt_wysiwyg_literal>([^`\r\n])*            { return(TOKENIZER_LITERAL); }
+"`"                                         { BEGIN(alt_wysiwyg_literal);    return(TOKENIZER_EXECUTING_LINE_ARROW); }
+<alt_wysiwyg_literal>([^`\r\n])*            { return(TOKENIZER_EXECUTING_LINE_ARROW); }
 <alt_wysiwyg_literal>\n                     { return(TOKENIZER_NEWLINE); }
 <alt_wysiwyg_literal>\r                     { return(TOKENIZER_NEWLINE); }
 <alt_wysiwyg_literal>\r\n                   { return(TOKENIZER_NEWLINE); }
-<alt_wysiwyg_literal>"`"                    { BEGIN(INITIAL);            return(TOKENIZER_LITERAL); }
+<alt_wysiwyg_literal>"`"                    { BEGIN(INITIAL);            return(TOKENIZER_EXECUTING_LINE_ARROW); }
 
 0x{H}+                          { return(TOKENIZER_LITERAL); }
 0X{H}+                          { return(TOKENIZER_LITERAL); }

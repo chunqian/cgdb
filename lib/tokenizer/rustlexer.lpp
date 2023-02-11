@@ -138,12 +138,12 @@ IDENTIFIER {L}+{T}*
 [a-z_]+!                { return(TOKENIZER_DIRECTIVE); }
 #!?\[.*]                { return(TOKENIZER_DIRECTIVE); }
 
-\"                                          { BEGIN(string_literal);    return(TOKENIZER_LITERAL); }
-<string_literal>(\\[^\r\n]|[^\\"\r\n])*     { return(TOKENIZER_LITERAL); }
+\"                                          { BEGIN(string_literal);    return(TOKENIZER_EXECUTING_LINE_ARROW); }
+<string_literal>(\\[^\r\n]|[^\\"\r\n])*     { return(TOKENIZER_EXECUTING_LINE_ARROW); }
 <string_literal>\n                          { return(TOKENIZER_NEWLINE); }
 <string_literal>\r                          { return(TOKENIZER_NEWLINE); }
 <string_literal>\r\n                        { return(TOKENIZER_NEWLINE); }
-<string_literal>\"                          { BEGIN(INITIAL);           return(TOKENIZER_LITERAL); }
+<string_literal>\"                          { BEGIN(INITIAL);           return(TOKENIZER_EXECUTING_LINE_ARROW); }
 
 {D}{D}*([E|e][-+]?{D}+|\.{D}+([E|e][-+]?{D}+)?)? { return(TOKENIZER_LITERAL); } 
 0b{B}+      { return(TOKENIZER_LITERAL); }
