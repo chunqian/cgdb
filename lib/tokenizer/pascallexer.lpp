@@ -1,0 +1,192 @@
+%option prefix="pascal_"
+%option outfile="lex.yy.c"
+%option noyywrap
+%option nounput
+%option noinput
+
+D       [0-9]
+H       [0-9a-fA-F_]
+L       [a-zA-Z_]
+T       [0-9a-zA-Z_]
+IDENTIFIER {L}+{T}*
+
+%{
+
+/* System Includes */
+#include <stdio.h>
+#include "tokenizer.h"
+
+%}
+
+%x comment
+%x string_literal
+
+%%
+"integer"               { return(TOKENIZER_TYPE); }
+"shortint"              { return(TOKENIZER_TYPE); }
+"smallint"              { return(TOKENIZER_TYPE); }
+"longint"               { return(TOKENIZER_TYPE); }
+"longword"              { return(TOKENIZER_TYPE); }
+"int64"                 { return(TOKENIZER_TYPE); }
+"byte"                  { return(TOKENIZER_TYPE); }
+"word"                  { return(TOKENIZER_TYPE); }
+"cardinal"              { return(TOKENIZER_TYPE); }
+"qword"                 { return(TOKENIZER_TYPE); }
+"boolean"               { return(TOKENIZER_TYPE); }
+"bytebool"              { return(TOKENIZER_TYPE); }
+"wordbool"              { return(TOKENIZER_TYPE); }
+"longbool"              { return(TOKENIZER_TYPE); }
+"qwordbool"             { return(TOKENIZER_TYPE); }
+"char"                  { return(TOKENIZER_TYPE); }
+"boolean16"             { return(TOKENIZER_TYPE); }
+"boolean32"             { return(TOKENIZER_TYPE); }
+"boolean64"             { return(TOKENIZER_TYPE); }
+"variant"               { return(TOKENIZER_TYPE); }
+"real"                  { return(TOKENIZER_TYPE); }
+"single"                { return(TOKENIZER_TYPE); }
+"double"                { return(TOKENIZER_TYPE); }
+"extended"              { return(TOKENIZER_TYPE); }
+"comp"                  { return(TOKENIZER_TYPE); }
+"currency"              { return(TOKENIZER_TYPE); }
+"string"                { return(TOKENIZER_TYPE); }
+"shortstring"           { return(TOKENIZER_TYPE); }
+"ansistring"            { return(TOKENIZER_TYPE); }
+"widestring"            { return(TOKENIZER_TYPE); }
+"unicodestring"         { return(TOKENIZER_TYPE); }
+"resourcestring"        { return(TOKENIZER_TYPE); }
+"ansichar"              { return(TOKENIZER_TYPE); }
+"widechar"              { return(TOKENIZER_TYPE); }
+"unicodechar"           { return(TOKENIZER_TYPE); }
+"pchar"                 { return(TOKENIZER_TYPE); }
+"pointer"               { return(TOKENIZER_TYPE); }
+
+"absolute"              { return(TOKENIZER_KEYWORD); }
+"and"                   { return(TOKENIZER_KEYWORD); }
+"array"                 { return(TOKENIZER_KEYWORD); }
+"asm"                   { return(TOKENIZER_KEYWORD); }
+"begin"                 { return(TOKENIZER_KEYWORD); }
+"case"                  { return(TOKENIZER_KEYWORD); }
+"const"                 { return(TOKENIZER_KEYWORD); }
+"constructor"           { return(TOKENIZER_KEYWORD); }
+"destructor"            { return(TOKENIZER_KEYWORD); }
+"div"                   { return(TOKENIZER_KEYWORD); }
+"do"                    { return(TOKENIZER_KEYWORD); }
+"downto"                { return(TOKENIZER_KEYWORD); }
+"else"                  { return(TOKENIZER_KEYWORD); }
+"end"                   { return(TOKENIZER_KEYWORD); }
+"file"                  { return(TOKENIZER_KEYWORD); }
+"for"                   { return(TOKENIZER_KEYWORD); }
+"function"              { return(TOKENIZER_KEYWORD); }
+"goto"                  { return(TOKENIZER_KEYWORD); }
+"if"                    { return(TOKENIZER_KEYWORD); }
+"implementation"        { return(TOKENIZER_KEYWORD); }
+"in"                    { return(TOKENIZER_KEYWORD); }
+"inherited"             { return(TOKENIZER_KEYWORD); }
+"inline"                { return(TOKENIZER_KEYWORD); }
+"interface"             { return(TOKENIZER_KEYWORD); }
+"label"                 { return(TOKENIZER_KEYWORD); }
+"mod"                   { return(TOKENIZER_KEYWORD); }
+"nil"                   { return(TOKENIZER_KEYWORD); }
+"not"                   { return(TOKENIZER_KEYWORD); }
+"object"                { return(TOKENIZER_KEYWORD); }
+"of"                    { return(TOKENIZER_KEYWORD); }
+"operator"              { return(TOKENIZER_KEYWORD); }
+"or"                    { return(TOKENIZER_KEYWORD); }
+"packed"                { return(TOKENIZER_KEYWORD); }
+"procedure"             { return(TOKENIZER_KEYWORD); }
+"program"               { return(TOKENIZER_KEYWORD); }
+"record"                { return(TOKENIZER_KEYWORD); }
+"reintroduce"           { return(TOKENIZER_KEYWORD); }
+"repeat"                { return(TOKENIZER_KEYWORD); }
+"self"                  { return(TOKENIZER_KEYWORD); }
+"set"                   { return(TOKENIZER_KEYWORD); }
+"shl"                   { return(TOKENIZER_KEYWORD); }
+"shr"                   { return(TOKENIZER_KEYWORD); }
+"string"                { return(TOKENIZER_KEYWORD); }
+"then"                  { return(TOKENIZER_KEYWORD); }
+"to"                    { return(TOKENIZER_KEYWORD); }
+"type"                  { return(TOKENIZER_KEYWORD); }
+"unit"                  { return(TOKENIZER_KEYWORD); }
+"until"                 { return(TOKENIZER_KEYWORD); }
+"uses"                  { return(TOKENIZER_KEYWORD); }
+"var"                   { return(TOKENIZER_KEYWORD); }
+"while"                 { return(TOKENIZER_KEYWORD); }
+"with"                  { return(TOKENIZER_KEYWORD); }
+"as"                    { return(TOKENIZER_KEYWORD); }
+"class"                 { return(TOKENIZER_KEYWORD); }
+"dispinterface"         { return(TOKENIZER_KEYWORD); }
+"except"                { return(TOKENIZER_KEYWORD); }
+"exports"               { return(TOKENIZER_KEYWORD); }
+"finalization"          { return(TOKENIZER_KEYWORD); }
+"finally"               { return(TOKENIZER_KEYWORD); }
+"initialization"        { return(TOKENIZER_KEYWORD); }
+"is"                    { return(TOKENIZER_KEYWORD); }
+"library"               { return(TOKENIZER_KEYWORD); }
+"on"                    { return(TOKENIZER_KEYWORD); }
+"out"                   { return(TOKENIZER_KEYWORD); }
+"packed"                { return(TOKENIZER_KEYWORD); }
+"property"              { return(TOKENIZER_KEYWORD); }
+"raise"                 { return(TOKENIZER_KEYWORD); }
+"resourcestring"        { return(TOKENIZER_KEYWORD); }
+"threadvar"             { return(TOKENIZER_KEYWORD); }
+
+\{                    { BEGIN(comment); return(TOKENIZER_COMMENT); }
+<comment>\$[^\}\r\n]* { return(TOKENIZER_TYPE); }
+<comment>[^\$\}\r\n]* { return(TOKENIZER_COMMENT); }
+<comment>\n             { return(TOKENIZER_NEWLINE); }
+<comment>\r             { return(TOKENIZER_NEWLINE); }
+<comment>\r\n           { return(TOKENIZER_NEWLINE); }
+<comment>\}        { BEGIN(INITIAL); return(TOKENIZER_COMMENT); }
+
+\/\/[^\r\n]*              { return(TOKENIZER_COMMENT); }
+
+#{L}+                   { return(TOKENIZER_DIRECTIVE); }
+
+\'                                          { BEGIN(string_literal);    return(TOKENIZER_EXECUTING_LINE_ARROW); }
+<string_literal>(\\[^\r\n]|[^\\'\r\n])*     { return(TOKENIZER_EXECUTING_LINE_ARROW); }
+<string_literal>\n                          { return(TOKENIZER_NEWLINE); }
+<string_literal>\r                          { return(TOKENIZER_NEWLINE); }
+<string_literal>\r\n                        { return(TOKENIZER_NEWLINE); }
+<string_literal>\'                          { BEGIN(INITIAL);           return(TOKENIZER_EXECUTING_LINE_ARROW); }
+
+
+{D}+                    { return(TOKENIZER_LITERAL); }
+{D}+[lL]                { return(TOKENIZER_LITERAL); }
+{D}+[uU]                { return(TOKENIZER_LITERAL); }
+{D}+[lL][lL]            { return(TOKENIZER_LITERAL); }
+{D}+[uU][lL]            { return(TOKENIZER_LITERAL); }
+{D}+[uU][lL][lL]        { return(TOKENIZER_LITERAL); }
+{D}+[lL][uU]            { return(TOKENIZER_LITERAL); }
+{D}+[lL][lL][uU]        { return(TOKENIZER_LITERAL); }
+0x{H}+                  { return(TOKENIZER_LITERAL); }
+0x{H}+[lL]              { return(TOKENIZER_LITERAL); }
+0x{H}+[uU]              { return(TOKENIZER_LITERAL); }
+0x{H}+[lL][lL]          { return(TOKENIZER_LITERAL); }
+0x{H}+[uU][lL]          { return(TOKENIZER_LITERAL); }
+0x{H}+[uU][lL][lL]      { return(TOKENIZER_LITERAL); }
+0x{H}+[lL][uU]          { return(TOKENIZER_LITERAL); }
+0x{H}+[lL][lL][uU]      { return(TOKENIZER_LITERAL); }
+\${H}+                  { return(TOKENIZER_LITERAL); }
+\${H}+[lL]              { return(TOKENIZER_LITERAL); }
+\${H}+[uU]              { return(TOKENIZER_LITERAL); }
+\${H}+[lL][lL]          { return(TOKENIZER_LITERAL); }
+\${H}+[uU][lL]          { return(TOKENIZER_LITERAL); }
+\${H}+[uU][lL][lL]      { return(TOKENIZER_LITERAL); }
+\${H}+[lL][uU]          { return(TOKENIZER_LITERAL); }
+\${H}+[lL][lL][uU]      { return(TOKENIZER_LITERAL); }
+
+{D}*\.?{D}+([eE][-+]?{D}+)?    { return(TOKENIZER_LITERAL); }
+{D}+\.?({D})?+[fF]      { return(TOKENIZER_LITERAL); }
+\.{D}+[fF]              { return(TOKENIZER_LITERAL); }
+
+'.'                     { return(TOKENIZER_LITERAL); }
+'\\.'                   { return(TOKENIZER_LITERAL); }
+
+\n                      { return(TOKENIZER_NEWLINE); }
+\r\n                    { return(TOKENIZER_NEWLINE); }
+\r                      { return(TOKENIZER_NEWLINE); }
+[ \t\v\f]               { return(TOKENIZER_TEXT);    }
+{IDENTIFIER}            { return(TOKENIZER_TEXT);    }
+.                       { return(TOKENIZER_TEXT);    }
+
+%%

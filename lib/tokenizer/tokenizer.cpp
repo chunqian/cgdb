@@ -12,6 +12,7 @@ const char *d_extensions[] = { ".d", ".di" };
 const char *go_extensions[] = { ".go" };
 const char *rust_extensions[] = { ".rs" };
 const char *ada_extensions[] = { ".adb", ".ads", ".ada" };
+const char *pascal_extensions[] = { ".pas", ".pp", ".p", ".inc", ".lpr", ".dpr", ".dfm", ".dpk" };
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 
@@ -27,6 +28,7 @@ DECLARE_LEX_FUNCTIONS(d)
 DECLARE_LEX_FUNCTIONS(go)
 DECLARE_LEX_FUNCTIONS(rust)
 DECLARE_LEX_FUNCTIONS(ada)
+DECLARE_LEX_FUNCTIONS(pascal)
 DECLARE_LEX_FUNCTIONS(cgdbhelp)
 
 #undef DECLARE_LEX_FUNCTIONS
@@ -96,6 +98,8 @@ int tokenizer_set_buffer(struct tokenizer *t, const char *buffer, enum tokenizer
         INIT_LEX(cgdbhelp);
     } else if (l == TOKENIZER_LANGUAGE_RUST) {
         INIT_LEX(rust);
+    } else if (l == TOKENIZER_LANGUAGE_PASCAL) {
+        INIT_LEX(pascal);
     } else {
         INIT_LEX(ada);
     }
@@ -170,6 +174,10 @@ enum tokenizer_language_support tokenizer_get_default_file_type(const char
     for (i = 0; i < sizeof (ada_extensions) / sizeof (char *); i++)
         if (strcasecmp(file_extension, ada_extensions[i]) == 0)
             return TOKENIZER_LANGUAGE_ADA;
+
+    for (i = 0; i < sizeof (pascal_extensions) / sizeof (char *); i++)
+        if (strcasecmp(file_extension, pascal_extensions[i]) == 0)
+            return TOKENIZER_LANGUAGE_PASCAL;
 
     return l;
 }

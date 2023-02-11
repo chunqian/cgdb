@@ -40,6 +40,7 @@ lib/tokenizer/clexer.cpp
 lib/tokenizer/dlexer.cpp
 lib/tokenizer/golexer.cpp
 lib/tokenizer/rustlexer.cpp
+lib/tokenizer/pascallexer.cpp
 
 cgdb/command_lexer.cpp
 cgdb_custom_config.h

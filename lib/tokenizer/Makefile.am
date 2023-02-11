@@ -7,6 +7,7 @@ AM_CXXFLAGS = \
 # create the input library
 noinst_LIBRARIES = libtokenizer.a
 libtokenizer_a_SOURCES = \
+    pascallexer.lpp \
     adalexer.lpp \
     clexer.lpp \
     asmlexer.lpp \

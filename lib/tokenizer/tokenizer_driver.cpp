@@ -72,7 +72,7 @@ static char *load_file(const char *filename)
 static void usage(void)
 {
 
-    printf("tokenizer_driver <file> <c|d|go|rust|ada>\n");
+    printf("tokenizer_driver <file> <c|d|go|rust|ada|pascal>\n");
     exit(-1);
 }
 
@@ -98,6 +98,8 @@ int main(int argc, char **argv)
         l = TOKENIZER_LANGUAGE_GO;
     else if (strcmp(argv[2], "ada") == 0)
         l = TOKENIZER_LANGUAGE_ADA;
+    else if (strcmp(argv[2], "pascal") == 0)
+        l = TOKENIZER_LANGUAGE_PASCAL;
     else
         usage();
 

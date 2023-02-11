@@ -660,6 +660,8 @@ int command_set_syntax_type(const char *value)
         lang = TOKENIZER_LANGUAGE_ADA;
     else if (strcasecmp(value, "rust") == 0)
         lang = TOKENIZER_LANGUAGE_RUST;
+    else if (strcasecmp(value, "pascal") == 0)
+        lang = TOKENIZER_LANGUAGE_PASCAL;
 
     /* If caller specified a language or 'on', enable highlighting */
     if (lang != TOKENIZER_LANGUAGE_UNKNOWN || strcasecmp(value, "on") == 0 || strcasecmp(value, "yes") == 0)
